@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@theme {
+  /* Backgrounds */
+  --color-bg-base: #0A0C14;
+  --color-bg-sidebar: #0D0F1A;
+  --color-bg-card: #12151F;
+  --color-bg-input: #1C2035;
+
+  /* Borders */
+  --color-border-subtle: #1E2235;
+  --color-border-DEFAULT: #2D3148;
+
+  /* Accents */
+  --color-accent-purple: #7C3AED;
+  --color-accent-purpleLight: #A78BFA;
+  --color-accent-blue: #3B82F6;
+
+  /* Status */
+  --color-status-easy: #10B981;
+  --color-status-medium: #F59E0B;
+  --color-status-hard: #EF4444;
+
+  /* Platforms */
+  --color-platform-leetcode: #F89F1B;
+  --color-platform-codeforces: #3B82F6;
+  --color-platform-codechef: #FCD34D;
+  --color-platform-hackerrank: #00C853;
+
+  /* Text */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-faint: #4B5563;
+
+  /* Radius */
+  --radius-card: 14px;
+  --radius-pill: 8px;
+
+  /* Font */
+  --font-sans: "Inter", sans-serif;
+}
+
+body {
+  background-color: #0A0C14;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0C14;
+}
+::-webkit-scrollbar-thumb {
+  background: #2D3148;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
