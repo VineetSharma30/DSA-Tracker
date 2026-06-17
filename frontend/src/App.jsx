@@ -1,13 +1,20 @@
-import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import AppLayout from './layouts/AppLayout'
+import {Login, Dashboard, Problems, Analytics} from './pages/pages'
 
-const App = () => {
+function App() {
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center">
-      <div className="bg-bg-card border border-border-subtle rounded-card p-8">
-        <h1 className="text-text-primary text-2xl font-bold">Theme is working!</h1>
-        <p className="text-text-muted mt-2">If this looks dark with a card, you're good.</p>
-      </div>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/problems" element={<Problems />} />
+          <Route path="/analytics" element={<Analytics />} />
+        </Route>
+    </Routes>
+    </>
   )
 }
 
