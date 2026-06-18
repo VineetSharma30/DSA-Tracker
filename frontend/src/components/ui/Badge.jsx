@@ -5,6 +5,7 @@ const styles = {
         easy: "text-status-easy border-status-easy",
         medium: "text-status-medium border-status-medium",
         hard: "text-status-hard border-status-hard",
+        muted: "text-text-muted border-text-muted",
     },
     filled: {
         easy: "text-status-easy bg-green-950",
@@ -13,7 +14,7 @@ const styles = {
     },
 };
 
-const Badge = ({children, color = "easy", variant= "outlined", className = ""}) => {
+const Badge = ({children, variant= "outlined", color = "easy", className = ""}) => {
 
   return (
     <div className={`rounded-pill inline-flex items-center border px-2.5 py-1 text-xs font-medium ${styles[variant][color]} ${className}`}>

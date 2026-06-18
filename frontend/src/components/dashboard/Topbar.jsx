@@ -5,7 +5,7 @@ function Topbar() {
   const { user } = useAuth();
 
   return (
-    <header className="h-16 bg-bg-sidebar border-b border-border-subtle flex items-center justify-between px-6">
+    <header className="min-h-16 bg-bg-sidebar border-b border-border-subtle flex items-center justify-between px-6">
       {/* Search */}
       <div className="flex items-center gap-2 bg-bg-card border border-border-DEFAULT rounded-pill px-3.5 py-2 w-80">
         <Search size={15} className="text-text-faint" />
@@ -19,7 +19,7 @@ function Topbar() {
       {/* Right side */}
       <div className="flex items-center gap-4">
         {/* Date pill */}
-        <div className="flex items-center gap-2 bg-bg-input border border-border-DEFAULT rounded-pill px-3 py-2 text-xs text-text-secondary">
+        <div className=" max-h-14 flex items-center gap-2 bg-bg-input border border-border-DEFAULT rounded-pill px-3 py-2 text-xs text-text-secondary">
           <Calendar size={14} />
           May 20 - May 27, 2024
         </div>
