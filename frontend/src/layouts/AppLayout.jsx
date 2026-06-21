@@ -8,7 +8,7 @@ function AppLayout() {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-y-auto">
         <Topbar />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-5">
           <Outlet />
         </main>
       </div>

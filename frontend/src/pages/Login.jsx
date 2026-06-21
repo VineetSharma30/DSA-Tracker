@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
+import { Card, Button} from '../components/ui/Ui'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate()
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -50,9 +51,9 @@ function Login() {
 						Track Everything.
 					</h1>
 					<div className="text-text-muted text-sm leading-relaxed mb-10">
-             <p> Your unified dashboard for LeetCode, Codeforces, </p>
-             <p> CodeChef & HackerRank. Spot weak areas. </p>
-             <p> Crush contests. Get AI-powered insights. </p>
+						<p> Your unified dashboard for LeetCode, Codeforces, </p>
+						<p> CodeChef & HackerRank. Spot weak areas. </p>
+						<p> Crush contests. Get AI-powered insights. </p>
 					</div>
 				</div>
 
@@ -138,8 +139,11 @@ function Login() {
 
 				<p className="text-center text-xs text-text-muted mt-6">
 					Don't have an account?{" "}
-					<span className="text-accent-purple cursor-pointer">
-						Create one free →
+					<span
+					className="text-accent-purple cursor-pointer hover:underline"
+					onClick={() => navigate("/register")}
+					>
+					Create one free →
 					</span>
 				</p>
 			</Card>
