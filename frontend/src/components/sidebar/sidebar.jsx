@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home, List, BarChart3, Flag, Target, Users, Trophy, Sparkles, Settings } from 'lucide-react'
+import { Home, List, BarChart3, Flag, Target,User, Users, Trophy, Sparkles, Settings } from 'lucide-react'
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: Home },
@@ -7,10 +7,11 @@ const navItems = [
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/contests", label: "Contests", icon: Flag },
   { to: "/goals", label: "Goals", icon: Target },
-  { to: "/friends", label: "Friends", icon: Users },
-  { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
-  { to: "/ai-insights", label: "AI Insights", icon: Sparkles },
+  { to: "/profile", label: "Profile", icon: User },
   { to: "/settings", label: "Settings", icon: Settings },
+  // { to: "/friends", label: "Friends", icon: Users },
+  // { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
+  // { to: "/ai-insights", label: "AI Insights", icon: Sparkles },
 ];
 
 function Sidebar() {
