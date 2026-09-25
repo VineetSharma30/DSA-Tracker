@@ -159,7 +159,7 @@ function Profile() {
 
           {/* Per-platform rating cards */}
           <div className="grid grid-cols-2 gap-3">
-            {profileData.platforms.map((p) => (
+            {profile.platforms.map((p) => (
               <Card key={p.name} className="p-4 relative overflow-hidden">
                 <div
                   className="absolute left-0 top-0 bottom-0 w-1 rounded-l-card"
