@@ -1,26 +1,35 @@
 import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { ratingHistory } from '../../data/mockData'
 
-const PLATFORMS = ["LeetCode", "Codeforces", "CodeChef"];
-const COLORS = { LeetCode: "#F89F1B", Codeforces: "#3B82F6", CodeChef: "#FCD34D" };
+const COLORS = { LeetCode: "#F89F1B", Codeforces: "#3B82F6", CodeChef: "#FCD34D" }
 
-function RatingHistoryChart() {
-  const [activePlatform, setActivePlatform] = useState("LeetCode");
-  const data = ratingHistory[activePlatform];
+// data: { Codeforces: [{ contest: "Jun 12", rating: 1456 }, ...], ... }
+function RatingHistoryChart({ data = {} }) {
+  const platforms = Object.keys(data).filter(p => data[p] && data[p].length > 0)
+  const [active, setActive] = useState(null)
+
+  if (platforms.length === 0) {
+    return (
+      <div className="h-45 flex items-center justify-center text-text-faint text-xs">
+        No contest rating history yet.
+      </div>
+    )
+  }
+
+  // Fall back to the first available platform (handles async-loaded data too).
+  const current = active && platforms.includes(active) ? active : platforms[0]
+  const series = data[current]
 
   return (
     <div>
       {/* Platform tabs */}
       <div className="flex gap-2 mb-4">
-        {PLATFORMS.map((p) => (
+        {platforms.map((p) => (
           <button
             key={p}
-            onClick={() => setActivePlatform(p)}
+            onClick={() => setActive(p)}
             className={`px-3 py-1 rounded-pill text-xs font-medium transition-colors ${
-              activePlatform === p
-                ? "bg-accent-purple text-white"
-                : "text-text-muted hover:text-text-secondary"
+              current === p ? "bg-accent-purple text-white" : "text-text-muted hover:text-text-secondary"
             }`}
           >
             {p}
@@ -29,7 +38,7 @@ function RatingHistoryChart() {
       </div>
 
       <ResponsiveContainer width="100%" height={180}>
-        <LineChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+        <LineChart data={series} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#1E2235" strokeOpacity={0.5} vertical={false} />
           <XAxis
             dataKey="contest"
@@ -51,9 +60,9 @@ function RatingHistoryChart() {
           <Line
             type="monotone"
             dataKey="rating"
-            stroke={COLORS[activePlatform]}
+            stroke={COLORS[current] || "#7C3AED"}
             strokeWidth={2}
-            dot={{ fill: COLORS[activePlatform], r: 4 }}
+            dot={{ fill: COLORS[current] || "#7C3AED", r: 4 }}
           />
         </LineChart>
       </ResponsiveContainer>

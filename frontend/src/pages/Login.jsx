@@ -2,16 +2,30 @@ import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { Card, Button} from '../components/ui/Ui'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate()
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log("Login attempt:", { email, password });
-	};
+	const [error, setError] = useState("")
+	const [loading, setLoading] = useState(false)
+	const { login } = useAuth()
+
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		setError("")
+		setLoading(true)
+		try {
+		await login(email, password)
+		navigate("/dashboard")
+		} catch (err) {
+		setError(err.response?.data?.error || "Login failed. Please try again.")
+		} finally {
+		setLoading(false)
+		}
+	}
 
 	const platforms = [
 		{
@@ -108,13 +122,18 @@ function Login() {
 					<p className=" px-1 text-right text-xs text-accent-purple cursor-pointer">
 						Forgot password?
 					</p>
+					{error && (
+					<p className="text-status-hard text-xs font-medium bg-status-hard/10 border border-status-hard/30 rounded-lg px-3 py-2">
+						{error}
+					</p>
+					)}
 
-					<Button
-						variant="primary"
-						size="lg"
-						className="w-full drop-shadow-accent-purple drop-shadow-sm"
-					>
-						Sign In →
+					<Button 
+						variant="primary" 
+						size="lg" 
+						className="w-full" 
+						disabled={loading}>
+						{loading ? "Signing in..." : "Sign In →"}
 					</Button>
 				</form>
 

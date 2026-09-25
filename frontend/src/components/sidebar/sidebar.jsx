@@ -1,20 +1,23 @@
 import { NavLink } from 'react-router-dom'
-import { Home, List, BarChart3, Flag, Target,User, Users, Trophy, Sparkles, Settings } from 'lucide-react'
+import { Home, List, BarChart3, Flag, Target, User, Users, Trophy, Sparkles, Settings, LogOut } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: Home },
-  { to: "/problems", label: "Problems", icon: List },
-  { to: "/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/contests", label: "Contests", icon: Flag },
-  { to: "/goals", label: "Goals", icon: Target },
-  { to: "/profile", label: "Profile", icon: User },
-  { to: "/settings", label: "Settings", icon: Settings },
-  // { to: "/friends", label: "Friends", icon: Users },
-  // { to: "/leaderboards", label: "Leaderboards", icon: Trophy },
-  // { to: "/ai-insights", label: "AI Insights", icon: Sparkles },
+  { to: "/dashboard",  label: "Dashboard",  icon: Home      },
+  { to: "/problems",   label: "Problems",   icon: List      },
+  { to: "/analytics",  label: "Analytics",  icon: BarChart3 },
+  { to: "/analytics2", label: "Analytics 2", icon: BarChart3 },
+  { to: "/contests",   label: "Contests",   icon: Flag      },
+  { to: "/goals",      label: "Goals",      icon: Target    },
+  { to: "/friends",    label: "Friends",    icon: Users     },
+  { to: "/profile",    label: "Profile",    icon: User      },
+  { to: "/settings",   label: "Settings",   icon: Settings  },
 ];
 
 function Sidebar() {
+  // logout() clears the user; ProtectedRoute then redirects to the login page.
+  const { logout } = useAuth()
+
   return (
     <aside className="w-55 h-screen bg-bg-sidebar border-r border-border-subtle flex flex-col">
       {/* Logo */}
@@ -45,11 +48,20 @@ function Sidebar() {
         ))}
       </nav>
 
-      {/* Streak card */}
-      <div className="m-3 p-4 rounded-card bg-[#1A1A2E] border border-accent-purple/30">
-        <p className="text-text-primary text-sm font-semibold">🔥 21 Day Streak!</p>
-        <p className="text-text-muted text-xs mt-1">Keep grinding. Consistency wins.</p>
+      {/* Motivational card */}
+      <div className="mx-3 mt-3 p-4 rounded-card bg-[#1A1A2E] border border-accent-purple/30">
+        <p className="text-text-primary text-sm font-semibold">🔥 Keep your streak alive!</p>
+        <p className="text-text-muted text-xs mt-1">Solve one problem today. Consistency wins.</p>
       </div>
+
+      {/* Logout */}
+      <button
+        onClick={logout}
+        className="m-3 flex items-center gap-3 px-3.5 py-2.5 rounded-pill text-sm text-text-muted hover:text-status-hard hover:bg-status-hard/10 transition-colors"
+      >
+        <LogOut size={16} />
+        Log out
+      </button>
     </aside>
   );
 }

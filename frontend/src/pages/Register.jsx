@@ -3,31 +3,38 @@ import { FaGithub } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import { useAuth } from '../context/AuthContext'
 
 function Register() {
   const navigate = useNavigate()
+  const { register } = useAuth()
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     username: "", email: "", password: "", confirmPassword: ""
   })
   const [error, setError] = useState("")
 
+  
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (form.password !== form.confirmPassword) {
       setError("Passwords don't match")
       return
     }
-    if (form.password.length < 6) {
-      setError("Password must be at least 6 characters")
-      return
-    }
     setError("")
-    console.log("Register attempt:", form)
-    // TODO: POST /api/auth/register → redirect to /dashboard
+    setLoading(true)
+    try {
+      await register(form.email, form.username, form.password)
+      navigate("/dashboard")
+    } catch (err) {
+      setError(err.response?.data?.error || "Registration failed. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const platforms = [
@@ -50,18 +57,16 @@ function Register() {
         <div className="relative h-80 pt-14 mb-30">
             {/* <img src="../assets/Ellipse.svg" alt="-" className="absolute w-full h-full" /> */} {/* Not working */}
             <h1 className="text-5xl font-extrabold text-text-primary leading-tight">
-                    Start your
+              Start your
             </h1>
             <h1 className="text-5xl font-extrabold text-accent-purple leading-tight mb-4">
                 DSA journey.
             </h1>
-			<div className="text-text-muted text-sm leading-relaxed mb-10">
-                <p> Join thousands of competitive programmers tracking their progress </p>
-                <p> across LeetCode, Codeforces, CodeChef & HackerRank. </p>
-			</div>
-		</div>
-
-
+          <div className="text-text-muted text-sm leading-relaxed mb-10">
+            <p> Join thousands of competitive programmers tracking their progress </p>
+            <p> across LeetCode, Codeforces, CodeChef & HackerRank. </p>
+          </div>
+        </div>
         <div className="flex gap-3">
           {platforms.map((p) => (
             <span

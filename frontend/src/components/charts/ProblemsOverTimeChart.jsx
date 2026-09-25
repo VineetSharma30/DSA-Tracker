@@ -1,10 +1,16 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { solvedOverTime } from '../../data/mockData'
 
-function ProblemsOverTimeChart() {
+function ProblemsOverTimeChart({ data = [] }) {
+  if (!data.length) {
+    return (
+      <div className="h-[155px] flex items-center justify-center text-text-faint text-xs">
+        Not enough activity yet — sync or add problems.
+      </div>
+    )
+  }
   return (
     <ResponsiveContainer width="100%" height={155} >
-      <AreaChart data={solvedOverTime} margin={{ top: 5, right: 10, left: -30, bottom: 0 }}>
+      <AreaChart data={data} margin={{ top: 5, right: 10, left: -30, bottom: 0 }}>
         <defs>
           <linearGradient id="colorSolved" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.3}/>

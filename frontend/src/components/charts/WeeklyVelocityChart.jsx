@@ -1,12 +1,20 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
-import { weeklyVelocity } from '../../data/mockData'
 
-const maxVal = Math.max(...weeklyVelocity.map(d => d.solved));
+// data: [{ week: "Jun 02", solved: 12 }, ...]
+function WeeklyVelocityChart({ data = [] }) {
+  if (!data.length) {
+    return (
+      <div className="h-45 flex items-center justify-center text-text-faint text-xs">
+        No weekly data yet.
+      </div>
+    )
+  }
 
-function WeeklyVelocityChart() {
+  const maxVal = Math.max(...data.map(d => d.solved), 1)
+
   return (
     <ResponsiveContainer width="100%" height={180}>
-      <BarChart data={weeklyVelocity} margin={{ top: 5, right: 10, left: -30, bottom: 0 }} barSize={20}>
+      <BarChart data={data} margin={{ top: 5, right: 10, left: -30, bottom: 0 }} barSize={20}>
         <XAxis
           dataKey="week"
           tick={{ fill: "#6B7280", fontSize: 11 }}
@@ -17,6 +25,7 @@ function WeeklyVelocityChart() {
           tick={{ fill: "#6B7280", fontSize: 11 }}
           axisLine={false}
           tickLine={false}
+          allowDecimals={false}
         />
         <Tooltip
           cursor={false}
@@ -24,11 +33,8 @@ function WeeklyVelocityChart() {
           labelStyle={{ color: "#9CA3AF" }}
         />
         <Bar dataKey="solved" radius={[4, 4, 0, 0]}>
-          {weeklyVelocity.map((entry, index) => (
-            <Cell
-              key={index}
-              fill={entry.solved === maxVal ? "#7C3AED" : "#1E3A5F"}
-            />
+          {data.map((entry, index) => (
+            <Cell key={index} fill={entry.solved === maxVal ? "#7C3AED" : "#1E3A5F"} />
           ))}
         </Bar>
       </BarChart>

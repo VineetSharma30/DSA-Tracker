@@ -1,75 +1,94 @@
 import { useState } from 'react'
-import {Modal, Button} from '../ui/Ui'
-const CATEGORIES = ["problems", "rating", "topic", "learning"]
-const COLORS = ["#7C3AED", "#F89F1B", "#3B82F6", "#10B981", "#EF4444", "#F59E0B"]
+import { Modal, Button } from '../ui/Ui'
 
-const empty = { title: "", category: "problems", target: "", current: "0", deadline: "", color: "#7C3AED" }
+const categories = ["problems", "rating", "topic", "learning"]
+const colors     = ["#7C3AED", "#F89F1B", "#3B82F6", "#10B981", "#EF4444", "#F59E0B"]
 
-function AddGoalModal({ isOpen, onClose, onAdd }) {
-  const [form, setForm] = useState(empty)
+const emptyForm = {
+  title:    "",
+  category: "problems",
+  target:   "",
+  current:  "0",
+  deadline: "",
+  color:    "#7C3AED",
+}
 
-  const handleChange = (e) => {
+// Shared styles for inputs and labels
+const inputCls = "w-full bg-bg-input border border-border-DEFAULT rounded-lg px-3 py-2.5 text-sm text-text-primary placeholder:text-text-faint outline-none focus:border-accent-purple transition-colors"
+const labelCls = "text-text-secondary text-xs font-medium block mb-1.5"
+
+// Reusable label + input wrapper
+const Field = ({ label, children }) => (
+  <div>
+    <label className={labelCls}>{label}</label>
+    {children}
+  </div>
+)
+
+const AddGoalModal = ({ isOpen, onClose, onAdd }) => {
+  const [form, setForm] = useState(emptyForm)
+
+  // Updates one field in the form by its input name
+  const onChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
     if (!form.title.trim() || !form.target) return
+
     onAdd({
-      ...form,
-      id: Date.now(),
-      target: Number(form.target),
-      current: Number(form.current),
+      title:         form.title.trim(),
+      category:      form.category,
+      target_value:  Number(form.target),
+      current_value: Number(form.current),
+      deadline:      form.deadline || null,
+      color:         form.color,
     })
-    setForm(empty)
+
+    setForm(emptyForm)
     onClose()
   }
 
-  const inputClass = "w-full bg-bg-input border border-border-DEFAULT rounded-lg px-3 py-2.5 text-sm text-text-primary placeholder:text-text-faint outline-none focus:border-accent-purple transition-colors"
-  const labelClass = "text-text-secondary text-xs font-medium block mb-1.5"
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Add Goal">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className={labelClass}>Goal Title *</label>
-          <input type="text" name="title" value={form.title} onChange={handleChange}
-            placeholder="e.g. Solve 50 Graph problems" className={inputClass} required />
-        </div>
+      <form onSubmit={onSubmit} className="space-y-4">
+
+        <Field label="Goal Title *">
+          <input
+            type="text"
+            name="title"
+            value={form.title}
+            onChange={onChange}
+            placeholder="e.g. Solve 50 Graph problems"
+            className={inputCls}
+            required
+          />
+        </Field>
 
         <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className={labelClass}>Category</label>
-            <select name="category" value={form.category} onChange={handleChange}
-              className={`${inputClass} cursor-pointer`}>
-              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+          <Field label="Category">
+            <select name="category" value={form.category} onChange={onChange} className={`${inputCls} cursor-pointer`}>
+              {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
-          </div>
-          <div>
-            <label className={labelClass}>Deadline</label>
-            <input type="date" name="deadline" value={form.deadline} onChange={handleChange}
-              className={`${inputClass} cursor-pointer`} />
-          </div>
+          </Field>
+          <Field label="Deadline">
+            <input type="date" name="deadline" value={form.deadline} onChange={onChange} className={`${inputCls} cursor-pointer`} />
+          </Field>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className={labelClass}>Target Value *</label>
-            <input type="number" name="target" value={form.target} onChange={handleChange}
-              placeholder="e.g. 50" className={inputClass} required min="1" />
-          </div>
-          <div>
-            <label className={labelClass}>Current Progress</label>
-            <input type="number" name="current" value={form.current} onChange={handleChange}
-              placeholder="0" className={inputClass} min="0" />
-          </div>
+          <Field label="Target Value *">
+            <input type="number" name="target" value={form.target} onChange={onChange} placeholder="e.g. 50" className={inputCls} required min="1" />
+          </Field>
+          <Field label="Current Progress">
+            <input type="number" name="current" value={form.current} onChange={onChange} placeholder="0" className={inputCls} min="0" />
+          </Field>
         </div>
 
-        {/* Color picker */}
-        <div>
-          <label className={labelClass}>Accent Color</label>
+        <Field label="Accent Color">
           <div className="flex gap-2 mt-1">
-            {COLORS.map(c => (
+            {colors.map(c => (
               <button
                 key={c}
                 type="button"
@@ -77,22 +96,19 @@ function AddGoalModal({ isOpen, onClose, onAdd }) {
                 className="w-7 h-7 rounded-full transition-transform hover:scale-110"
                 style={{
                   backgroundColor: c,
-                  outline: form.color === c ? `2px solid ${c}` : "none",
-                  outlineOffset: "2px"
+                  outline:       form.color === c ? `2px solid ${c}` : "none",
+                  outlineOffset: "2px",
                 }}
               />
             ))}
           </div>
-        </div>
+        </Field>
 
         <div className="flex gap-3 pt-1">
-          <Button type="button" variant="secondary" size="md" className="flex-1" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" size="md" className="flex-1">
-            Add Goal
-          </Button>
+          <Button type="button" variant="secondary" size="md" className="flex-1" onClick={onClose}>Cancel</Button>
+          <Button type="submit"  variant="primary"   size="md" className="flex-1">Add Goal</Button>
         </div>
+
       </form>
     </Modal>
   )

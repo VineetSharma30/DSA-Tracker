@@ -4,22 +4,22 @@ import Button from '../ui/Button'
 
 function EditProfileModal({ isOpen, onClose, profile, onSave }) {
   const [form, setForm] = useState({
-    name: profile?.name || "",
-    username: profile?.username || "",
     bio: profile?.bio || "",
-    leetcode_handle: profile?.platforms?.[0]?.handle || "",
-    codeforces_handle: profile?.platforms?.[1]?.handle || "",
-    codechef_handle: profile?.platforms?.[2]?.handle || "",
+    leetcode_handle: profile?.leetcode_handle || "",
+    codeforces_handle: profile?.codeforces_handle || "",
+    codechef_handle: profile?.codechef_handle || "",
   })
+  const [saving, setSaving] = useState(false)
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSave(form)
-    onClose()
+    setSaving(true)
+    await onSave(form)   // parent does the PATCH + closes
+    setSaving(false)
   }
 
   const inputClass = "w-full bg-bg-input border border-border-DEFAULT rounded-lg px-3 py-2.5 text-sm text-text-primary placeholder:text-text-faint outline-none focus:border-accent-purple transition-colors"
@@ -28,17 +28,10 @@ function EditProfileModal({ isOpen, onClose, profile, onSave }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Profile" width="w-[520px]">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className={labelClass}>Full Name</label>
-            <input type="text" name="name" value={form.name}
-              onChange={handleChange} className={inputClass} />
-          </div>
-          <div>
-            <label className={labelClass}>Username</label>
-            <input type="text" name="username" value={form.username}
-              onChange={handleChange} className={inputClass} />
-          </div>
+        <div>
+          <label className={labelClass}>Username</label>
+          <input type="text" value={profile?.username || ""} disabled
+            className={`${inputClass} opacity-60 cursor-not-allowed`} />
         </div>
 
         <div>
@@ -77,8 +70,8 @@ function EditProfileModal({ isOpen, onClose, profile, onSave }) {
           <Button type="button" variant="secondary" size="md" className="flex-1" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" size="md" className="flex-1">
-            Save Changes
+          <Button type="submit" variant="primary" size="md" className="flex-1" disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </form>

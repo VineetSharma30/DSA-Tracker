@@ -204,3 +204,36 @@ export const contestHistory = [
   { platform: "CodeChef",   name: "Starters 144",          date: "Jun 05", rank: 445,  delta: "+31",  color: "#FCD34D" },
   { platform: "Codeforces", name: "Round 985",             date: "Jun 01", rank: 1102, delta: "+15",  color: "#3B82F6" },
 ];
+
+// ── Friends page ──────────────────────────────────────────────────
+export const mockFriends = [
+  { id: 1, name: "Rahul Verma",  handle: "@rv_codes",  avatar: "R", streak: 31, solved: 489, acc: 74, status: "online",  statusLabel: "Online",       activity: "Reviewing: DP on Trees",                color: "#7C3AED" },
+  { id: 2, name: "Sneha Rao",    handle: "@sneha_r",   avatar: "S", streak: 9,  solved: 278, acc: 72, status: "contest", statusLabel: "In Contest ↑",  activity: "In contest: Biweekly #134",             color: "#EF4444" },
+  { id: 3, name: "Arjun Mehta",  handle: "@arjun_m",  avatar: "A", streak: 14, solved: 312, acc: 68, status: "solving", statusLabel: "Solving ↑",    activity: "Solving: Median of Two Sorted Arrays",  color: "#10B981" },
+  { id: 4, name: "Divya Iyer",   handle: "@divya_i",  avatar: "D", streak: 7,  solved: 224, acc: 65, status: "online",  statusLabel: "Online",       activity: "Just solved: Trapping Rain Water",       color: "#3B82F6" },
+  { id: 5, name: "Aditya Singh", handle: "@adi_singh", avatar: "A", streak: 5,  solved: 167, acc: 59, status: "online",  statusLabel: "Online",       activity: "Studying: Graph Algorithms",             color: "#F59E0B" },
+  { id: 6, name: "Pooja Sharma", handle: "@pooja_dsa", avatar: "P", streak: 3,  solved: 142, acc: 61, status: "away",    statusLabel: "Away",         activity: "Away • 18 min ago",                    color: "#6B7280" },
+];
+
+export const mockActivity = [
+  { id: 1, name: "Sneha Rao",    avatar: "S", color: "#EF4444", action: "solved",          detail: "Word Break",               tag: "Hard",   tagColor: "#EF4444", time: "2h ago" },
+  { id: 2, name: "Rahul Verma",  avatar: "R", color: "#7C3AED", action: "reached",         detail: "Knight on LeetCode",        tag: null,     tagColor: null,      time: "3h ago" },
+  { id: 3, name: "Arjun Mehta",  avatar: "A", color: "#10B981", action: "improved",        detail: "Graphs accuracy by 12%",    tag: null,     tagColor: null,      time: "5h ago" },
+  { id: 4, name: "Divya Iyer",   avatar: "D", color: "#3B82F6", action: "solved",          detail: "Trapping Rain Water",       tag: "Medium", tagColor: "#F59E0B", time: "6h ago" },
+  { id: 5, name: "Aditya Singh", avatar: "A", color: "#F59E0B", action: "started solving", detail: "Graph Algorithms Roadmap",  tag: null,     tagColor: null,      time: "7h ago" },
+  { id: 6, name: "Pooja Sharma", avatar: "P", color: "#6B7280", action: "joined",          detail: "Binary Search Jam",         tag: null,     tagColor: null,      time: "9h ago" },
+];
+
+export const mockLeaderboard = [
+  { rank: 1, name: "Rahul Verma",  avatar: "R", color: "#7C3AED", score: 840 },
+  { rank: 2, name: "Sneha Rao",    avatar: "S", color: "#EF4444", score: 732 },
+  { rank: 3, name: "Arjun Mehta",  avatar: "A", color: "#10B981", score: 621 },
+  { rank: 4, name: "Divya Iyer",   avatar: "D", color: "#3B82F6", score: 512 },
+  { rank: 5, name: "Aditya Singh", avatar: "A", color: "#F59E0B", score: 403 },
+];
+
+export const mockJams = [
+  { id: 1, title: "DP Deep Dive",          members: "Rahul Verma + 3 others",  time: "Today, 6:00 PM",     color: "#7C3AED" },
+  { id: 2, title: "Graph Theory Session",  members: "Sneha Rao + 5 others",    time: "Tomorrow, 7:00 PM",  color: "#3B82F6" },
+  { id: 3, title: "Contest Prep Jam",      members: "Arjun Mehta + 2 others",  time: "Jun 15, 9:00 AM",    color: "#10B981" },
+];

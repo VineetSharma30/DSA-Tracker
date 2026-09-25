@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(venv/Scripts/python.exe _gql_probe.py)",
+      "Bash(venv/Scripts/python.exe -m py_compile services/leetcode_service.py)",
+      "Bash(venv/Scripts/python.exe _contest_probe.py)"
+    ]
+  }
+}

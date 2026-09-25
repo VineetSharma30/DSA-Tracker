@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
-function Modal({ isOpen, onClose, title, children, width = "w-[500px]" }) {
+const Modal = ({ isOpen, onClose, title, children, width = "w-[500px]" }) => {
   // Close on Escape key
   useEffect(() => {
     if (!isOpen) return
@@ -21,12 +21,12 @@ function Modal({ isOpen, onClose, title, children, width = "w-[500px]" }) {
   return (
     // Backdrop
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-transparent"
       onClick={onClose}
     >
       {/* Modal panel — stop propagation so clicking inside doesn't close */}
       <div
-        className={`${width} bg-bg-card border border-border-subtle rounded-card shadow-2xl`}
+        className={`${width} bg-bg-card border border-border-DEFAULT rounded-card ring-1 ring-black/40 shadow-[0_24px_70px_-10px_rgba(0,0,0,0.85)]`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
