@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import AppLayout from './layouts/AppLayout'
-import {Login, Register, Dashboard, Problems, Analytics, Profile, Goals, Contests, Settings} from './pages/Pages.jsx'
+import {Login, Register, Dashboard, Problems, Analytics, Profile, Goals, Contests, Settings} from './pages/pages.jsx'
 
 function App() {
   return (

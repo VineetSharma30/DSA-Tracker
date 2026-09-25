@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Plus, Target, Trophy, BookOpen, Code2 } from 'lucide-react'
-import {Card, Button} from '../components/ui/Ui'
+import {Card, Button} from '../components/ui/ui'
 import { goalsData } from '../data/mockData'
 import AddGoalModal from '../components/dashboard/AddGoalModal'
 
@@ -79,16 +79,32 @@ function GoalCard({ goal }) {
 
 
 // Goals
+const GOALS_STORAGE_KEY = "dsa_tracker_goals";
 
 function Goals() {
-  const completed = goalsData.filter(g => g.current >= g.target).length;
-  const inProgress = goalsData.length - completed;
-
-  const [goals, setGoals] = useState(goalsData)
+  const [goals, setGoals] = useState(() => {
+    try {
+      const saved = localStorage.getItem(GOALS_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : goalsData;
+    } catch {
+      return goalsData;
+    }
+  });
   const [showAddModal, setShowAddModal] = useState(false)
 
+  const completed = goals.filter(g => g.current >= g.target).length;
+  const inProgress = goals.length - completed;
+
   const handleAddGoal = (newGoal) => {
-    setGoals(prev => [...prev, newGoal])
+    setGoals(prev => {
+      const updated = [...prev, newGoal];
+      try {
+        localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error("Failed to save goal", e);
+      }
+      return updated;
+    });
   }
 
   return (

@@ -3,12 +3,55 @@ import { MapPin, Calendar, ExternalLink, Edit3 } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
-import { profileData, overallStats } from '../data/mockData'
+import { profileData as defaultProfileData, overallStats } from '../data/mockData'
 import EditProfileModal from '../components/dashboard/EditProfileModal'
+import { useAuth } from '../context/AuthContext'
+
+const PROFILE_STORAGE_KEY = "dsa_tracker_profile_data";
 
 function Profile() {
+  const { user, updateUser } = useAuth();
+  const [showEditModal, setShowEditModal] = useState(false);
 
-  const [showEditModal, setShowEditModal] = useState(false)
+  const [profile, setProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      ...defaultProfileData,
+      name: user?.name || defaultProfileData.name,
+      avatarInitial: user?.avatarInitial || defaultProfileData.avatarInitial,
+      bio: user?.bio || defaultProfileData.bio,
+    };
+  });
+
+  const handleSaveProfile = (newData) => {
+    const updated = {
+      ...profile,
+      name: newData.name || profile.name,
+      username: newData.username || profile.username,
+      bio: newData.bio || profile.bio,
+      avatarInitial: (newData.name ? newData.name.charAt(0) : profile.avatarInitial).toUpperCase(),
+      platforms: profile.platforms.map((p) => {
+        if (p.platform === "LeetCode" && newData.leetcode_handle) return { ...p, handle: newData.leetcode_handle };
+        if (p.platform === "Codeforces" && newData.codeforces_handle) return { ...p, handle: newData.codeforces_handle };
+        if (p.platform === "CodeChef" && newData.codechef_handle) return { ...p, handle: newData.codechef_handle };
+        return p;
+      })
+    };
+    setProfile(updated);
+    updateUser({
+      name: updated.name,
+      bio: updated.bio,
+      avatarInitial: updated.avatarInitial,
+    });
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to save profile", e);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -34,21 +77,21 @@ function Profile() {
             {/* Avatar */}
             <div className="px-5 pb-5">
               <div className="w-18 h-18 rounded-full bg-accent-purple border-4 border-bg-card flex items-center justify-center text-white text-2xl font-bold -mt-8 mb-3">
-                {profileData.avatarInitial}
+                {profile.avatarInitial}
               </div>
 
-              <h2 className="text-text-primary text-lg font-bold">{profileData.name}</h2>
-              <p className="text-text-muted text-xs mt-0.5">{profileData.username}</p>
-              <p className="text-text-secondary text-xs mt-2 leading-relaxed">{profileData.bio}</p>
+              <h2 className="text-text-primary text-lg font-bold">{profile.name}</h2>
+              <p className="text-text-muted text-xs mt-0.5">{profile.username}</p>
+              <p className="text-text-secondary text-xs mt-2 leading-relaxed">{profile.bio}</p>
 
               <div className="flex items-center gap-1.5 mt-3 text-text-faint text-xs">
                 <Calendar size={12} />
-                <span>Joined {profileData.joinedDate}</span>
+                <span>Joined {profile.joinedDate}</span>
               </div>
 
               {/* Stat mini row */}
               <div className="grid grid-cols-4 gap-2 mt-4 pt-4 border-t border-border-subtle">
-                {profileData.stats.map((s) => (
+                {profile.stats.map((s) => (
                   <div key={s.label} className="text-center">
                     <p className="text-text-primary text-sm font-bold">{s.value}</p>
                     <p className="text-text-faint text-[10px] mt-0.5">{s.label}</p>
@@ -62,7 +105,7 @@ function Profile() {
           <Card className="p-4">
             <h3 className="text-text-primary text-sm font-semibold mb-3">Platform Accounts</h3>
             <div className="space-y-3">
-              {profileData.platforms.map((p) => (
+              {profile.platforms.map((p) => (
                 <div key={p.name} className="flex items-center gap-3">
                   <div
                     className="w-2 h-2 rounded-full shrink-0"
@@ -157,8 +200,8 @@ function Profile() {
       <EditProfileModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        profile={profileData}
-        onSave={(data) => console.log("Save profile:", data)}
+        profile={profile}
+        onSave={handleSaveProfile}
       />
     </div>
   )

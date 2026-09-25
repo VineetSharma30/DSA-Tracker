@@ -3,9 +3,11 @@ import { FaGithub } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import { useAuth } from '../context/AuthContext'
 
 function Register() {
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [form, setForm] = useState({
     username: "", email: "", password: "", confirmPassword: ""
   })
@@ -17,17 +19,28 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (form.password !== form.confirmPassword) {
+    if (form.password && form.confirmPassword && form.password !== form.confirmPassword) {
       setError("Passwords don't match")
       return
     }
-    if (form.password.length < 6) {
+    if (form.password && form.password.length < 6) {
       setError("Password must be at least 6 characters")
       return
     }
     setError("")
-    console.log("Register attempt:", form)
-    // TODO: POST /api/auth/register → redirect to /dashboard
+    register({
+      username: form.username || "New Coder",
+      email: form.email || "coder@example.com"
+    })
+    navigate("/dashboard")
+  }
+
+  const handleGoogleSignup = () => {
+    register({
+      username: "Google User",
+      email: "google_user@example.com"
+    })
+    navigate("/dashboard")
   }
 
   const platforms = [
@@ -158,12 +171,15 @@ function Register() {
         </div>
 
         <div className="space-y-3">
-          <Button variant="secondary" size="lg" className="w-full">
+          <Button
+            type="button"
+            variant="secondary"
+            size="lg"
+            className="w-full cursor-pointer"
+            onClick={handleGoogleSignup}
+          >
             Continue with Google
           </Button>
-          {/* <Button variant="secondary" size="lg" className="w-full flex items-center justify-center gap-2">
-            <FaGithub size={15} /> Continue with GitHub
-          </Button> */}
         </div>
 
         <p className="text-center text-xs text-text-muted mt-5">

@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import { Card, Button} from '../components/ui/Ui'
+import { Card, Button} from '../components/ui/ui'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate()
+	const { login } = useAuth()
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("Login attempt:", { email, password });
+		login(email || "vineet@example.com", password);
+		navigate("/dashboard");
+	};
+
+	const handleGoogleLogin = () => {
+		login("google_user@example.com", "google");
+		navigate("/dashboard");
 	};
 
 	const platforms = [
@@ -125,16 +133,27 @@ function Login() {
 				</div>
 
 				<div className="space-y-3">
-					<Button variant="secondary" size="lg" className="w-full">
-						Continue with Google
-					</Button>
-					{/* <Button
+					<Button
+						type="button"
 						variant="secondary"
 						size="lg"
-						className="w-full flex items-center justify-center gap-2"
+						className="w-full cursor-pointer"
+						onClick={handleGoogleLogin}
 					>
-						<FaGithub size={16} /> Continue with GitHub
-					</Button> */}
+						Continue with Google
+					</Button>
+					<Button
+						type="button"
+						variant="secondary"
+						size="lg"
+						className="w-full cursor-pointer border border-accent-purple/40 text-accent-purple hover:bg-accent-purple/10"
+						onClick={() => {
+							login("vineet@example.com", "demo");
+							navigate("/dashboard");
+						}}
+					>
+						⚡ Quick Demo Login (Skip)
+					</Button>
 				</div>
 
 				<p className="text-center text-xs text-text-muted mt-6">

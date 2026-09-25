@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {Modal, Button} from '../ui/Ui'
+import {Modal, Button} from '../ui/ui'
 const CATEGORIES = ["problems", "rating", "topic", "learning"]
 const COLORS = ["#7C3AED", "#F89F1B", "#3B82F6", "#10B981", "#EF4444", "#F59E0B"]
 

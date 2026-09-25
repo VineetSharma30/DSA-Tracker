@@ -6,7 +6,9 @@ import { contestsData, contestHistory } from '../data/mockData'
 
 const PLATFORM_FILTERS = ["All", "LeetCode", "Codeforces", "CodeChef", "HackerRank"];
 
-function ContestCard({ contest }) {
+const CONTESTS_STORAGE_KEY = "dsa_tracker_contests";
+
+function ContestCard({ contest, onToggleRegister }) {
   return (
     <Card className="p-4 relative overflow-hidden">
       {/* Top color bar */}
@@ -41,9 +43,10 @@ function ContestCard({ contest }) {
         <Button
           variant={contest.registered ? "primary" : "secondary"}
           size="sm"
-          className="shrink-0 text-[11px]"
+          className="shrink-0 text-[11px] cursor-pointer"
+          onClick={() => onToggleRegister && onToggleRegister(contest.id)}
         >
-          {contest.registered ? "Registered" : "Register"}
+          {contest.registered ? "✓ Registered" : "Register"}
         </Button>
       </div>
     </Card>
@@ -52,10 +55,31 @@ function ContestCard({ contest }) {
 
 function Contests() {
   const [filter, setFilter] = useState("All");
+  const [contests, setContests] = useState(() => {
+    try {
+      const saved = localStorage.getItem(CONTESTS_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : contestsData;
+    } catch {
+      return contestsData;
+    }
+  });
 
-  const filtered = contestsData.filter(
+  const handleToggleRegister = (contestId) => {
+    setContests(prev => {
+      const updated = prev.map(c => c.id === contestId ? { ...c, registered: !c.registered } : c);
+      try {
+        localStorage.setItem(CONTESTS_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
+  };
+
+  const filtered = contests.filter(
     (c) => filter === "All" || c.platform === filter
   );
+
 
   return (
     <div className="space-y-4">
@@ -91,7 +115,11 @@ function Contests() {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {filtered.map((contest) => (
-              <ContestCard key={contest.id} contest={contest} />
+              <ContestCard
+                key={contest.id}
+                contest={contest}
+                onToggleRegister={handleToggleRegister}
+              />
             ))}
           </div>
         )}

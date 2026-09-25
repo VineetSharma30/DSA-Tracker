@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Plus, Search } from 'lucide-react'
-import { Card, Badge, Button} from '../components/ui/Ui'
+import { Card, Badge, Button} from '../components/ui/ui'
 import { mockProblems } from '../data/mockData'
 import AddProblemModal from '../components/dashboard/AddProblemModal'
 
@@ -20,16 +20,33 @@ const statusBadge = {
 const PLATFORMS = ["All", "LeetCode", "Codeforces", "CodeChef"];
 const DIFFICULTIES = ["All", "Easy", "Medium", "Hard"];
 
+const PROBLEMS_STORAGE_KEY = "dsa_tracker_problems";
+
 function Problems() {
   const [platform, setPlatform]     = useState("All");
   const [difficulty, setDifficulty] = useState("All");
   const [search, setSearch]         = useState("");
 
-  const [problems, setProblems] = useState(mockProblems) // local state instead of const
+  const [problems, setProblems] = useState(() => {
+    try {
+      const saved = localStorage.getItem(PROBLEMS_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : mockProblems;
+    } catch {
+      return mockProblems;
+    }
+  });
   const [showAddModal, setShowAddModal] = useState(false)
 
   const handleAddProblem = (newProblem) => {
-    setProblems(prev => [newProblem, ...prev])
+    setProblems(prev => {
+      const updated = [newProblem, ...prev];
+      try {
+        localStorage.setItem(PROBLEMS_STORAGE_KEY, JSON.stringify(updated));
+      } catch (e) {
+        console.error("Failed to save problem", e);
+      }
+      return updated;
+    });
   }
 
   const filtered = useMemo(() => {
